@@ -1,0 +1,19 @@
+!apt-get install openjdk-8-jdk-headless -qq > /dev/null
+
+!wget -q https://dlcdn.apache.org/spark/spark-3.5.0/spark-3.5.0-bin-hadoop3.tgz
+
+!tar xf spark-3.5.0-bin-hadoop3.tgz
+
+!pip install -q findspark
+
+import os
+os.environ["JAVA_HOME"] = "/usr/lib/jvm/java-8-openjdk-amd64"
+os.environ["SPARK_HOME"] = "/content/spark-3.5.0-bin-hadoop3"
+
+import findspark
+findspark.init()
+
+from pyspark import SparkContext
+spark_contexto = SparkContext()
+print(spark_contexto)
+print(spark_contexto.version)
