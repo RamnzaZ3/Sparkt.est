@@ -1,0 +1,35 @@
+!apt-get install openjdk-8-jdk-headless -qq > /dev/null
+
+!wget -q https://dlcdn.apache.org/spark/spark-3.5.0/spark-3.5.0-bin-hadoop3.tgz
+
+!tar xf spark-3.5.0-bin-hadoop3.tgz
+
+!pip install -q findspark
+
+import os
+os.environ["JAVA_HOME"] = "/usr/lib/jvm/java-8-openjdk-amd64"
+os.environ["SPARK_HOME"] = "/content/spark-3.5.0-bin-hadoop3"
+
+import findspark
+findspark.init()
+
+from pyspark import SparkContext
+spark_contexto = SparkContext()
+
+import numpy as np
+vetor = np.array([10, 20, 30, 40, 50])
+paralelo = spark_contexto.parallelize(vetor)
+print(paralelo)
+
+mapa = paralelo.map(lambda x : x**2+x)
+mapa.collect()
+
+paralelo = spark_contexto.parallelize(["distribuida", "distribuida", "spark", "rdd", "spark", "spark"])
+funcao_lambda = lambda x:(x,1)
+from operator import add
+mapa = paralelo.map(funcao_lambda).reduceByKey(add).collect()
+
+for (w, c) in mapa:
+
+  print("{}: {}".format(w, c))
+
